@@ -11,6 +11,8 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+vim.deprecate = function () end
+
 require("lazy").setup({
     spec = "theprimeagen.lazy",
     change_detection = { notify = false }

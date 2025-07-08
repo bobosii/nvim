@@ -29,6 +29,7 @@ return {
                 "lua_ls",
                 "rust_analyzer",
                 "tsserver",
+                "pyright",
                 "clangd",
             },
             handlers = {
