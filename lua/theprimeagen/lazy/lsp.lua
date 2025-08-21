@@ -22,20 +22,25 @@ return {
             vim.lsp.protocol.make_client_capabilities(),
             cmp_lsp.default_capabilities())
 
+        --"tsserver" not available
         require("fidget").setup({})
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
                 "lua_ls",
                 "rust_analyzer",
-                "tsserver",
                 "pyright",
                 "clangd",
             },
             handlers = {
                 function(server_name) -- default handler (optional)
-
                     require("lspconfig")[server_name].setup {
+                        capabilities = capabilities
+                    }
+                end,
+
+                ["tsserver"] = function()
+                    require("lspconfig").tsserver.setup {
                         capabilities = capabilities
                     }
                 end,
@@ -55,6 +60,15 @@ return {
                 end,
             }
         })
+
+        vim.diagnostic.config({
+            virtual_text = true,
+            signs = true,
+            underline = true,
+            update_in_insert = true,
+            severity_sort = true,
+        })
+
 
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
@@ -78,7 +92,7 @@ return {
             })
         })
 
-        vim.diagnostic.config({
+        --[[  vim.diagnostic.config({
             -- update_in_insert = true,
             float = {
                 focusable = false,
@@ -88,6 +102,6 @@ return {
                 header = "",
                 prefix = "",
             },
-        })
+        }) ]]
     end
 }

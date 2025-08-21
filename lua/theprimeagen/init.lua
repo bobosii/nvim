@@ -14,9 +14,10 @@ require("theprimeagen.lazy_init")
 -- DO NOT INCLUDE THIS
 -- DO.not
 vim.deprecate = function() end
+vim.opt.signcolumn = no
+vim.opt.fillchars:append({ eob = " " })
 local augroup = vim.api.nvim_create_augroup
 local ThePrimeagenGroup = augroup('ThePrimeagen', {})
-
 local autocmd = vim.api.nvim_create_autocmd
 local yank_group = augroup('HighlightYank', {})
 
@@ -41,7 +42,7 @@ autocmd('TextYankPost', {
     end,
 })
 
-autocmd({"BufWritePre"}, {
+autocmd({ "BufWritePre" }, {
     group = ThePrimeagenGroup,
     pattern = "*",
     command = [[%s/\s\+$//e]],
