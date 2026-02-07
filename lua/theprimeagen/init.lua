@@ -14,7 +14,7 @@ require("theprimeagen.lazy_init")
 -- DO NOT INCLUDE THIS
 -- DO.not
 vim.deprecate = function() end
-vim.opt.signcolumn = no
+vim.opt.signcolumn = "no"
 vim.opt.fillchars:append({ eob = " " })
 local augroup = vim.api.nvim_create_augroup
 local ThePrimeagenGroup = augroup('ThePrimeagen', {})

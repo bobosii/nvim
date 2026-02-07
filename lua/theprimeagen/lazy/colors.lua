@@ -1,5 +1,5 @@
 function ColorMyPencils(color)
-    color = color or "gruvbox-material"
+    color = color or "rose-pine-moon"
     vim.cmd.colorscheme(color)
 
     -- keep background transparent for main and floating windows
@@ -73,6 +73,47 @@ return {
             -- ColorMyPencils()
         end
     },
+    {
+    "rebelot/kanagawa.nvim",
+    priority = 1000, -- colorscheme önce yüklensin
+    config = function()
+      require("kanagawa").setup({
+        compile = false,
+        undercurl = true,
+        commentStyle = { italic = true },
+        functionStyle = {},
+        keywordStyle = { italic = true },
+        statementStyle = { bold = true },
+        typeStyle = {},
+        transparent = false,
+        dimInactive = false,
+        terminalColors = true,
+
+        colors = {
+          palette = {},
+          theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
+        },
+
+        overrides = function(colors)
+          return {
+            NormalFloat = { bg = colors.palette.sumiInk1 },
+            FloatBorder = { bg = colors.palette.sumiInk1, fg = colors.palette.sumiInk4 },
+            Pmenu = { fg = colors.theme.ui.shade0, bg = colors.palette.sumiInk2 },
+            PmenuSel = { fg = "NONE", bg = colors.palette.sumiInk4 },
+            CursorLineNr = { fg = colors.palette.carpYellow, bold = true },
+          }
+        end,
+
+        theme = "wave",   -- "wave" | "dragon" | "lotus"
+        background = {
+          dark = "wave",
+          light = "lotus",
+        },
+      })
+
+      vim.cmd("colorscheme kanagawa")
+    end,
+  },
 
     -- NEW: everforest (by sainnhe)
     {
@@ -89,4 +130,39 @@ return {
             -- ColorMyPencils()
         end
     },
+    {
+    "projekt0n/github-nvim-theme",
+    name = "github-theme",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("github-theme").setup({
+        -- theme seçenekleri: dark_default, dark_dimmed, dark_high_contrast, light_default, vb.
+        options = {
+          transparent = false,
+          terminal_colors = true,
+          dim_inactive = false,
+          module_default = true,
+          styles = {
+            comments = "italic",
+            functions = "NONE",
+            keywords = "bold",
+            variables = "NONE",
+            conditionals = "NONE",
+            constants = "NONE",
+            numbers = "NONE",
+            operators = "NONE",
+            strings = "NONE",
+            types = "NONE",
+          },
+        },
+      })
+
+      vim.cmd("colorscheme github_dark")
+      -- alternatif:
+      -- vim.cmd("colorscheme github_dark_default")
+      -- vim.cmd("colorscheme github_dark_dimmed")
+      -- vim.cmd("colorscheme github_dark_high_contrast")
+    end,
+  },
 }

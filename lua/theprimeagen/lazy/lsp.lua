@@ -1,13 +1,18 @@
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
-        "williamboman/mason.nvim",
+        {
+            "williamboman/mason.nvim",
+            version = "v1.31.0"
+
+        },
         "williamboman/mason-lspconfig.nvim",
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-cmdline",
         "hrsh7th/nvim-cmp",
+        "rafamadriz/friendly-snippets",
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "j-hui/fidget.nvim",
@@ -23,6 +28,7 @@ return {
             cmp_lsp.default_capabilities())
 
         --"tsserver" not available
+        require("luasnip.loaders.from_vscode").lazy_load()
         require("fidget").setup({})
         require("mason").setup()
         require("mason-lspconfig").setup({
@@ -31,6 +37,7 @@ return {
                 "rust_analyzer",
                 "pyright",
                 "clangd",
+                "ts_ls",
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -39,8 +46,8 @@ return {
                     }
                 end,
 
-                ["tsserver"] = function()
-                    require("lspconfig").tsserver.setup {
+                ["ts_ls"] = function()
+                    require("lspconfig").ts_ls.setup {
                         capabilities = capabilities
                     }
                 end,
@@ -105,3 +112,4 @@ return {
         }) ]]
     end
 }
+
