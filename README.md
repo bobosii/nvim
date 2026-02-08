@@ -1,5 +1,5 @@
 ### ThePrimeagen's init.lua
-This is my new RC.  There is no video yet.
+Copied from Primeagen's
 
 
 ### Requiretments.

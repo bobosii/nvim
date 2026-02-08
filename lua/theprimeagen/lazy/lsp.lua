@@ -15,17 +15,15 @@ return {
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "j-hui/fidget.nvim",
-        "windwp/nvim-autopairs",
-        "ray-x/lsp_signature.nvim", <--- Param Helper
+        "windwp/nvim-autopairs",     -- Auto-closing pairs engine
+        "ray-x/lsp_signature.nvim",  -- Parameter helper
     },
 
     config = function()
-        -- 1. Step: Signature Help (Param clue)
+        -- 1. Signature Help (Parameter Hints)
         require("lsp_signature").setup({
             bind = true,
-            handler_opts = {
-                border = "rounded"
-            },
+            handler_opts = { border = "rounded" },
             hint_enable = false,
         })
 
@@ -35,14 +33,28 @@ return {
             "force",
             {},
             vim.lsp.protocol.make_client_capabilities(),
-            cmp_lsp.default_capabilities())
+            cmp_lsp.default_capabilities()
+        )
 
-        require("nvim-autopairs").setup({})
+        -- 2. Autopairs Settings (Customized)
+        local npairs = require("nvim-autopairs")
+        local Rule = require('nvim-autopairs.rule') -- NEEDED FOR ADDING RULES MANUALLY
+
+        npairs.setup({})
+
+        -- CRITICAL: Clear all default rules ({, ", ' etc.)
+        npairs.clear_rules()
+
+        -- RE-ADD: Only add the parenthesis rule back.
+        -- This allows 'confirm_done' to work for functions ()
+        -- while keeping { and " manual.
+        npairs.add_rule(Rule("(", ")"))
+
         require("luasnip.loaders.from_vscode").lazy_load()
         require("fidget").setup({})
         require("mason").setup()
 
-        --
+        -- 3. Common Settings (for Inlay Hints)
         local on_attach = function(client, bufnr)
             if client.server_capabilities.inlayHintProvider then
                 vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
@@ -69,7 +81,6 @@ return {
                             completions = {
                                 completeFunctionCalls = true
                             },
-                            -- TypeScript Inlay Hints
                             typescript = {
                                 inlayHints = {
                                     includeInlayParameterNameHints = "all",
@@ -97,8 +108,7 @@ return {
                 end,
 
                 ["lua_ls"] = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.lua_ls.setup {
+                    require("lspconfig").lua_ls.setup {
                         capabilities = capabilities,
                         on_attach = on_attach,
                         settings = {
@@ -106,7 +116,7 @@ return {
                                 diagnostics = {
                                     globals = { "vim", "it", "describe", "before_each", "after_each" },
                                 },
-                                hint = { enable = true }, -- Hint for lua
+                                hint = { enable = true },
                             }
                         }
                     }
@@ -144,6 +154,7 @@ return {
             })
         })
 
+        -- 4. CMP Integration
         local cmp_autopairs = require('nvim-autopairs.completion.cmp')
         cmp.event:on(
             'confirm_done',
